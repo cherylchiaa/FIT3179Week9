@@ -31,7 +31,7 @@
                     "fields": ["TotalPetroleumSales"]
                 }
             },
-            {"calculate": "datum.TotalPetroleumSales", "as": "Total Petroleum Sales"}
+            {"calculate": "datum.TotalPetroleumSales + 0.1", "as": "Total Petroleum Sales"}
         ],
         "mark": {"type": "geoshape"},
         "encoding": {
