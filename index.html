@@ -13,12 +13,89 @@
 </head>
 <body>
   
-<div id="symbol_map"></div>
+<div id="choropleth_map"></div>
 
 <script type="text/javascript">
+    const spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "title": "Petroleum Sales by State (2020-2024)",
+        "width": 800,
+        "height": 400,
+        "projection": {"type": "mercator", "center": [133, -27], "scale": 500},
+        "layer": [
+        {
+            "data": {
+            "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/js/ne.json",
+            "format": {"type": "topojson", "feature": "ne_110m_graticules_5"}
+            },
+            "mark": {"type": "geoshape", "stroke": "black"}
+        },
+        {
+            "data": {
+            "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/js/ne.json",
+            "format": {"type": "topojson", "feature": "ne_50m_admin_1_states_provinces"}
+            },
+            "mark": {"type": "geoshape", "stroke": "lightgray"}
+        },
+        {
+            "transform": [
+                {
+                    "lookup": "properties.name",
+                    "from": {
+                        "data": {
+                        "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/data/petroleum_total_sales.csv"
+                        },
+                        "key": "State",
+                        "fields": ["TotalPetroleumSales"]
+                    }
+                },
+                {"calculate": "datum.TotalPetroleumSales + 0.1", "as": "Total Petroleum Sales"}
+            ],
+            "mark": {"type": "geoshape"},
+            "encoding": {
+                "color": {
+                    "field": "Total Petroleum Sales",
+                    "type": "quantitative",
+                    "scale": {"type": "log"}
+                },
+                "tooltip": [
+                    {"field": "properties.name", "type": "nominal", "title": "State"},
+                    {"field": "TotalPetroleumSales", "type": "quantitative"}
+                ]
+            }
+        },
+        {
+        "transform": [
+            {
+            "lookup": "properties.name",
+            "from": {
+                "data": {
+                "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/3_choropleth_map/data/countryInfo.csv"
+                },
+                "key": "name",
+                "fields": ["latitude", "longitude"]
+            }
+            }
+        ],
+        "mark": {"type": "text"},
+        "encoding": {
+            "longitude": {"field": "longitude", "type": "quantitative"},
+            "latitude": {"field": "latitude", "type": "quantitative"},
+            "text": {"field": "properties.NAME", "type": "nominal"},
+            "opacity": {
+            "condition": {
+                "test": "datum['properties.NAME'] == 'China' || datum['properties.NAME'] == 'Brazil' || datum['properties.NAME'] == 'Australia' || datum['properties.NAME'] == 'Malaysia' ||  datum['properties.NAME'] == 'Yemen' ||  datum['properties.NAME'] == 'United States of America'",
+                "value": 1
+            },
+            "value": 0
+            }
+        }
+        }
+        ]
+    };
 
-  var spec2 = "js/map.vg.json";
-  vegaEmbed('#symbol_map', spec2).then(function(result) {
+//   var spec2 = "js/map.vg.json";
+  vegaEmbed('#choropleth_map', spec).then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
   }).catch(console.error);
 </script>
