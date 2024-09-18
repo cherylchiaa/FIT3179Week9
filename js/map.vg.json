@@ -28,10 +28,10 @@
                     "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/data/petroleum_total_sales.csv"
                     },
                     "key": "State",
-                    "fields": ["Total: Petroleum sales"]
+                    "fields": ["TotalPetroleumSales"]
                 }
             },
-            {"calculate": "datum.Total: Petroleum sales", "as": "Total Petroleum Sales"}
+            {"calculate": "datum.TotalPetroleumSales", "as": "Total Petroleum Sales"}
         ],
         "mark": {"type": "geoshape"},
         "encoding": {
@@ -42,7 +42,7 @@
             },
             "tooltip": [
                 {"field": "properties.name", "type": "nominal", "title": "State"},
-                {"field": "Total Petroleum Sales", "type": "quantitative"}
+                {"field": "TotalPetroleumSales", "type": "quantitative"}
             ]
         }
       }
