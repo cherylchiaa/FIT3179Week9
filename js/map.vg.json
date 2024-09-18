@@ -1,0 +1,51 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Petroleum Sales by State (2020-2024)",
+    "width": 800,
+    "height": 400,
+    "projection": {"type": "mercator", "center": [133, -27], "scale": 500},
+    "layer": [
+      {
+        "data": {
+          "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/ne.json",
+          "format": {"type": "topojson", "feature": "ne_110m_graticules_5"}
+        },
+        "mark": {"type": "geoshape", "stroke": "black"}
+      },
+      {
+        "data": {
+          "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/ne.json",
+          "format": {"type": "topojson", "feature": "ne_50m_admin_1_states_provinces"}
+        },
+        "mark": {"type": "geoshape", "stroke": "lightgray"}
+      },
+      {
+        "transform": [
+            {
+                "lookup": "properties.name",
+                "from": {
+                    "data": {
+                    "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week9/main/petroleum_total_sales.csv"
+                    },
+                    "key": "State",
+                    "fields": ["Total: Petroleum sales"]
+                }
+            },
+            {"calculate": "datum['Total: Petroleum sales']", "as": "Total Petroleum Sales"}
+        ],
+        "mark": {"type": "geoshape"},
+        "encoding": {
+            "color": {
+                "field": "Total Petroleum Sales",
+                "type": "quantitative",
+                "scale": {"type": "log"}
+            },
+            "tooltip": [
+                {"field": "properties.name", "type": "nominal", "title": "State"},
+                {"field": "Total Petroleum Sales", "type": "quantitative"}
+            ]
+        }
+      }
+    ]
+}
+  
